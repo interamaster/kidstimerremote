@@ -9,7 +9,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.mio.jrdv.kidstimerremote.MainActivity">
+    tools:context="com.mio.jrdv.kidstimerremote.MainActivity"
+    android:background="@drawable/fondo2">
 
 
     <TextView
@@ -19,7 +20,8 @@
         android:layout_height="wrap_content"
         android:text="A NADIE"
         android:id="@+id/txtname_check_children"
-        android:layout_below="@+id/kidslayout"/>
+        android:layout_below="@+id/kidslayout"
+        android:textColor="@android:color/white"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -120,7 +122,8 @@
         android:id="@+id/kidslayout"
         android:layout_marginTop="52dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        >
 
         <com.github.siyamed.shapeimageview.CircularImageView
             android:layout_width="0dp"
