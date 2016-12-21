@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.StrictMode;
+import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -13,6 +14,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,6 +63,15 @@ public class MainActivity extends AppCompatActivity {
     //para el sonido del CODIGO
     private MediaPlayer mp;
 
+    //para evitar un doble click rapido
+
+    private long mLastClickTime = 0;
+
+
+    //para la aniamcion:
+
+    private static final int ANIMATION_DURATION = 1500;
+    private static final int ANIMATION_OFFSET = 250;
 
 
     @Override
@@ -184,6 +199,25 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void EnviarKid1(View view) {
+
+        //disable double press:
+
+///////////////////////////////////////////////////////////////////
+///////////////para evitar dobles clicks rapidos //////////////
+///////////////////////////////////////////////////////////////////
+
+
+        // mis -clicking prevention, using threshold of 1000 ms
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
+
+
+
+
+
         String Fotokid1path = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID1,"NONE");//por defecto vale 0
 
         if (!Fotokid1path.equals("NONE")){
@@ -443,6 +477,21 @@ public class MainActivity extends AppCompatActivity {
     public void EnviarKid2(View view) {
 
 
+///////////////////////////////////////////////////////////////////
+///////////////para evitar dobles clicks rapidos //////////////
+///////////////////////////////////////////////////////////////////
+
+
+        // mis -clicking prevention, using threshold of 1000 ms
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
+        // do your magic here . . . .
+
+
+
         String kidname = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID2,"NONE");//por defecto vale 0
 
         if (!kidname.equals("NONE")){
@@ -609,7 +658,14 @@ public class MainActivity extends AppCompatActivity {
                 // lo enviamos al kid 1
                 String kid1UIDFromPref = Myapplication.preferences.getString(Myapplication.PREF_UID_KID1, "NONE");//por defecto vale 0
 
+
+                //es kid1 y 15 min!!!
+                flyEnvelope("kidsreg1","min15pass");
+
+
                 enviarNotificaction(TIME, kid1UIDFromPref);
+
+
 
 
                 SuenaalGenerar();
@@ -618,10 +674,16 @@ public class MainActivity extends AppCompatActivity {
                 //es kid2
 
 
-                // lo enviamos al kid 1
+                // lo enviamos al kid 2
                 String kid2UIDFromPref = Myapplication.preferences.getString(Myapplication.PREF_UID_KID2, "NONE");//por defecto vale 0
 
+
+
+                //es kid2 y 15 min!!!
+                flyEnvelope("kidsreg2","min15pass");
+
                 enviarNotificaction(TIME, kid2UIDFromPref);
+
 
                 SuenaalGenerar();
 
@@ -680,17 +742,29 @@ public class MainActivity extends AppCompatActivity {
                 // lo enviamos al kid 1
                 String kid1UIDFromPref = Myapplication.preferences.getString(Myapplication.PREF_UID_KID1, "NONE");//por defecto vale 0
 
+
+                //es kid1 y 15 min!!!
+                flyEnvelope("kidsreg1","min30pass");
+
                 enviarNotificaction(TIME, kid1UIDFromPref);
+
+
+
                 SuenaalGenerar();
 
             } else if (ChildrenName.getText().toString() == kid2NameFromPref) {
                 //es kid2
 
 
-                // lo enviamos al kid 1
+                // lo enviamos al kid 2
                 String kid2UIDFromPref = Myapplication.preferences.getString(Myapplication.PREF_UID_KID2, "NONE");//por defecto vale 0
 
+
+                //es kid2 y 15 min!!!
+                flyEnvelope("kidsreg2","min30pass");
                 enviarNotificaction(TIME, kid2UIDFromPref);
+
+
 
                 SuenaalGenerar();
 
@@ -746,17 +820,24 @@ public class MainActivity extends AppCompatActivity {
                 // lo enviamos al kid 1
                 String kid1UIDFromPref = Myapplication.preferences.getString(Myapplication.PREF_UID_KID1, "NONE");//por defecto vale 0
 
+                //es kid1 y 60 min!!!
+                flyEnvelope("kidsreg1","hora1pass");
                 enviarNotificaction(TIME, kid1UIDFromPref);
+
                 SuenaalGenerar();
 
             } else if (ChildrenName.getText().toString() == kid2NameFromPref) {
                 //es kid2
 
 
-                // lo enviamos al kid 1
+                // lo enviamos al kid 2
                 String kid2UIDFromPref = Myapplication.preferences.getString(Myapplication.PREF_UID_KID2, "NONE");//por defecto vale 0
 
+                //es kid2 y 60 min!!!
+                flyEnvelope("kidsreg2","hora1pass");
                 enviarNotificaction(TIME, kid2UIDFromPref);
+
+
                 SuenaalGenerar();
 
             }
@@ -812,6 +893,80 @@ public class MainActivity extends AppCompatActivity {
                 // lo enviamos al kid 1
                 String kid1UIDFromPref = Myapplication.preferences.getString(Myapplication.PREF_UID_KID1, "NONE");//por defecto vale 0
 
+                //es kid1 y 3 horas !!!
+                flyEnvelope("kidsreg1","hora3pass");
+
+                enviarNotificaction(TIME, kid1UIDFromPref);
+                SuenaalGenerar();
+
+            } else if (ChildrenName.getText().toString() == kid2NameFromPref) {
+                //es kid2
+
+
+                // lo enviamos al kid 2
+                String kid2UIDFromPref = Myapplication.preferences.getString(Myapplication.PREF_UID_KID2, "NONE");//por defecto vale 0
+
+
+                //es kid2 y 3 horas !!!
+                flyEnvelope("kidsreg2","hora3pass");
+
+
+                enviarNotificaction(TIME, kid2UIDFromPref);
+
+                SuenaalGenerar();
+
+            }
+
+
+        }
+
+    }
+
+    public void generarCASTIGOCODE(View view) {
+
+        //1º chequeamos que tien nombre y esta bien:
+
+        if (ChildrenName.getText().toString().isEmpty() || ChildrenName.getText().toString().length() < 4 || ChildrenName.getText().toString().length() > 10) {
+
+            //no hay nombre o no esta bien
+            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+            alertDialog.setTitle("Alert");
+            alertDialog.setMessage("You must insert a valid Kid Name(or click picture if already inserted new kid)");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+
+            ChildrenName.setError("min 4 and max 8 characteres");
+
+
+        } else {
+
+            //2º)vamos aver cual es:
+            //si hay un nombre vamos aver cual:
+
+            //EJEMPLO:
+        /*
+        KIDFireBaseUID="cF_GGomFh10:APA91bGBRA8W7VlJ5xK8JjU8mUJ1vujnc1XlJhZTix5Xm39o4zwFCv8KfE0YxshtzTdBJ4hUDGXuJW9WIm8XOf9tzhBzJ5X1wf_v-UDXcrCJ5MBS648qPJoh-1cko5NemJvu8ySm20Wo";//yo!!
+        String TIME="3600000";
+        enviarNotificaction(TIME, RECIPIENT);
+        */
+
+            String TIME = "1";//TODO codigo de castigo es 1!!!
+            String kid1NameFromPref = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID1, "NONE");//por defecto vale 0
+            String kid2NameFromPref = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID2, "NONE");//por defecto vale 0
+
+
+            if (ChildrenName.getText().toString() == kid1NameFromPref) {
+                //es kid1
+
+
+                // lo enviamos al kid 1
+                String kid1UIDFromPref = Myapplication.preferences.getString(Myapplication.PREF_UID_KID1, "NONE");//por defecto vale 0
+
                 enviarNotificaction(TIME, kid1UIDFromPref);
                 SuenaalGenerar();
 
@@ -833,12 +988,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void generarCASTIGOCODE(View view) {
-
-        //TODO castigo
-
-    }
-
 
 
 
@@ -849,15 +998,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void SuenaalGenerar() {
 
-        int sonidomp3 = getResourceID("musical002", "raw", getApplicationContext());
-        mp = MediaPlayer.create(MainActivity.this, sonidomp3);
-        mp.start();
+
+
 
         Vibrator vibrator;
         vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 
 
         vibrator.vibrate(300); // vibrate for 0.3 seconds (e.g 300 milliseconds)
+
+
+        int sonidomp3 = getResourceID("musical002", "raw", getApplicationContext());
+        mp = MediaPlayer.create(MainActivity.this, sonidomp3);
+        mp.start();
 
     }
 
@@ -882,5 +1035,70 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+    /**
+     * Performs the flying animation of the envelope.
+     */
+    public void flyEnvelope(String Kid1or2, String minutos) {
+
+
+
+       // View botontimepovolar = findViewById(R.id.min15pass);
+
+      //  View botonkidvolar = findViewById(R.id.kidsreg1);
+
+
+
+        View botontimepovolar = findViewById(getResources().getIdentifier(minutos,"id",getPackageName()));
+
+         View botonkidvolar = findViewById(getResources().getIdentifier(Kid1or2,"id",getPackageName()));
+
+
+
+
+        int duration =  ANIMATION_DURATION ;
+        RotateAnimation rotationAnimation = new RotateAnimation(0, 360, botontimepovolar.getWidth() / 2, botontimepovolar.getHeight() / 2);
+        rotationAnimation.setDuration(duration);
+
+        RotateAnimation rotationAnimation2 = new RotateAnimation(360, 0, botonkidvolar.getWidth() / 2, botonkidvolar.getHeight() / 2);
+        rotationAnimation2.setDuration(duration);
+
+
+        AnimationSet set = new AnimationSet(this, null);
+
+        set.addAnimation(rotationAnimation);
+
+        AnimationSet set2 = new AnimationSet(this, null);
+
+        set2.addAnimation(rotationAnimation2);
+
+
+        set.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+               // onEmailFlew();
+                Log.d("INFO", "fin animacion");
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        botontimepovolar.startAnimation(set);
+        botonkidvolar.startAnimation(set2);
+
+
+    }
+
 
 }
