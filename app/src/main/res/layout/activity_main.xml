@@ -52,47 +52,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/kidslayout"
-        android:layout_marginTop="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
-
-        <com.github.siyamed.shapeimageview.CircularImageView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="100dp"
-            android:id="@+id/kidsreg1"
-            android:layout_gravity="center"
-            app:siBorderWidth="6dp"
-            app:siBorderColor="@android:color/darker_gray"
-            android:scaleType="fitXY"
-            android:background="@drawable/child_icon"
-            android:transitionName="Hijo1transition"
-            android:onClick="EnviarKid1"
-            />
-
-
-        <com.github.siyamed.shapeimageview.CircularImageView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="100dp"
-            android:id="@+id/kidsreg2"
-            android:layout_gravity="center"
-            app:siBorderWidth="6dp"
-            app:siBorderColor="@android:color/darker_gray"
-            android:scaleType="fitXY"
-            android:background="@drawable/girl_icon"
-            android:transitionName="Hijo3transition"
-            android:onClick="EnviarKid2"
-
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:id="@+id/linearLayoutminutos"
         android:background="@android:color/transparent"
         android:layout_below="@+id/txtname_check_children"
@@ -150,6 +109,48 @@
             android:background="@drawable/icon_3_horas"
             android:transitionName="Hijotransition"
             android:onClick="generar3HORASCode"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/kidslayout"
+        android:layout_marginTop="52dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <com.github.siyamed.shapeimageview.CircularImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="100dp"
+            android:id="@+id/kidsreg1"
+            android:layout_gravity="center"
+            app:siBorderWidth="6dp"
+            app:siBorderColor="@android:color/darker_gray"
+            android:scaleType="fitXY"
+            android:background="@drawable/child_icon"
+            android:transitionName="Hijo1transition"
+            android:onClick="EnviarKid1"
+            android:longClickable="true"
+            />
+
+
+        <com.github.siyamed.shapeimageview.CircularImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="100dp"
+            android:id="@+id/kidsreg2"
+            android:layout_gravity="center"
+            app:siBorderWidth="6dp"
+            app:siBorderColor="@android:color/darker_gray"
+            android:scaleType="fitXY"
+            android:background="@drawable/girl_icon"
+            android:transitionName="Hijo3transition"
+            android:onClick="EnviarKid2"
+            android:longClickable="true"
             />
 
     </LinearLayout>

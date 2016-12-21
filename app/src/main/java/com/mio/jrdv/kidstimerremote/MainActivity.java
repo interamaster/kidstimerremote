@@ -117,7 +117,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
 
-                Kid1YAtieneUID=false;
+                 Kid1YAtieneUID=false;
+
+
                 EnviarKid1( v);
 
 
@@ -130,7 +132,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
 
-                Kid2YAtieneUID=false;
+                 Kid2YAtieneUID=false;
+
+
                 EnviarKid2( v);
 
 
@@ -157,6 +161,20 @@ public class MainActivity extends AppCompatActivity {
         generate3horas.setImageResource(R.drawable.icon_3_horas);
 
 
+
+        //CHCEQEUAMOS SI YA EXISTEN LOS DATOS DE LOS KIDS O NO
+
+        String Fotokid1path = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID1,"NONE");//por defecto vale 0
+
+        if (!Fotokid1path.equals("NONE")){
+            Kid1YAtieneUID=true;
+        }
+
+        String kidname = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID2,"NONE");//por defecto vale 0
+
+        if (!kidname.equals("NONE")){
+            Kid2YAtieneUID=true;
+        }
 
     }
 
@@ -200,30 +218,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void EnviarKid1(View view) {
 
-        //disable double press:
-
-///////////////////////////////////////////////////////////////////
-///////////////para evitar dobles clicks rapidos //////////////
-///////////////////////////////////////////////////////////////////
-
-
-        // mis -clicking prevention, using threshold of 1000 ms
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
-            return;
-        }
-        mLastClickTime = SystemClock.elapsedRealtime();
 
 
 
-
-
-
+/*
         String Fotokid1path = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID1,"NONE");//por defecto vale 0
 
         if (!Fotokid1path.equals("NONE")){
             Kid1YAtieneUID=true;
         }
-
+*/
 
 
         if (!Kid1YAtieneUID) {
@@ -252,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogBox, int id) {
                             dialogBox.cancel();
+                            Kid1YAtieneUID=true;
                         }
                     });
 
@@ -367,6 +372,7 @@ public class MainActivity extends AppCompatActivity {
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogBox, int id) {
                                 dialogBox.cancel();
+                                Kid1YAtieneUID=true;
                             }
                         });
 
@@ -433,6 +439,7 @@ public class MainActivity extends AppCompatActivity {
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogBox, int id) {
                                 dialogBox.cancel();
+                                Kid2YAtieneUID=true;
                             }
                         });
 
@@ -449,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Log.d("INFO", "tomando UID kid 2: "+userInputDialogEditText2.getText().toString());
 
-                        Kid1YAtieneUID = true;
+                        Kid2YAtieneUID = true;
                         //  guardamos el path en pref
 
                         Myapplication.preferences.edit().putString(Myapplication.PREF_UID_KID2, userInputDialogEditText2.getText().toString()).commit();
@@ -477,26 +484,6 @@ public class MainActivity extends AppCompatActivity {
     public void EnviarKid2(View view) {
 
 
-///////////////////////////////////////////////////////////////////
-///////////////para evitar dobles clicks rapidos //////////////
-///////////////////////////////////////////////////////////////////
-
-
-        // mis -clicking prevention, using threshold of 1000 ms
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
-            return;
-        }
-        mLastClickTime = SystemClock.elapsedRealtime();
-
-        // do your magic here . . . .
-
-
-
-        String kidname = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID2,"NONE");//por defecto vale 0
-
-        if (!kidname.equals("NONE")){
-             Kid2YAtieneUID=true;
-        }
 
 
 
@@ -526,6 +513,7 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogBox, int id) {
                             dialogBox.cancel();
+                            Kid2YAtieneUID=true;
                         }
                     });
 
@@ -615,6 +603,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void generar15minCode(View view) {
 
+
+///////////////////////////////////////////////////////////////////
+///////////////para evitar dobles clicks rapidos //////////////
+///////////////////////////////////////////////////////////////////
+
+
+        // mis -clicking prevention, using threshold of 1000 ms
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
+        // do your magic here . . . .
+
+
         //1º chequeamos que tien nombre y esta bien:
 
         if (ChildrenName.getText().toString().isEmpty() || ChildrenName.getText().toString().length() < 4 || ChildrenName.getText().toString().length() > 10) {
@@ -699,6 +702,21 @@ public class MainActivity extends AppCompatActivity {
     public void generar30minCode(View view) {
 
 
+
+///////////////////////////////////////////////////////////////////
+///////////////para evitar dobles clicks rapidos //////////////
+///////////////////////////////////////////////////////////////////
+
+
+        // mis -clicking prevention, using threshold of 1000 ms
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
+        // do your magic here . . . .
+
+
         //1º chequeamos que tien nombre y esta bien:
 
         if (ChildrenName.getText().toString().isEmpty() || ChildrenName.getText().toString().length() < 4 || ChildrenName.getText().toString().length() > 10) {
@@ -777,6 +795,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void generar1HORACode(View view) {
 
+
+///////////////////////////////////////////////////////////////////
+///////////////para evitar dobles clicks rapidos //////////////
+///////////////////////////////////////////////////////////////////
+
+
+        // mis -clicking prevention, using threshold of 1000 ms
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
+        // do your magic here . . . .
+
+
         //1º chequeamos que tien nombre y esta bien:
 
         if (ChildrenName.getText().toString().isEmpty() || ChildrenName.getText().toString().length() < 4 || ChildrenName.getText().toString().length() > 10) {
@@ -848,6 +881,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void generar3HORASCode(View view) {
+
+
+///////////////////////////////////////////////////////////////////
+///////////////para evitar dobles clicks rapidos //////////////
+///////////////////////////////////////////////////////////////////
+
+
+        // mis -clicking prevention, using threshold of 1000 ms
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
+        // do your magic here . . . .
+
 
 
         //1º chequeamos que tien nombre y esta bien:
@@ -923,6 +971,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void generarCASTIGOCODE(View view) {
+
+
+///////////////////////////////////////////////////////////////////
+///////////////para evitar dobles clicks rapidos //////////////
+///////////////////////////////////////////////////////////////////
+
+
+        // mis -clicking prevention, using threshold of 1000 ms
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
+        // do your magic here . . . .
+
 
         //1º chequeamos que tien nombre y esta bien:
 
@@ -1008,7 +1071,7 @@ public class MainActivity extends AppCompatActivity {
         vibrator.vibrate(300); // vibrate for 0.3 seconds (e.g 300 milliseconds)
 
 
-        int sonidomp3 = getResourceID("musical002", "raw", getApplicationContext());
+        int sonidomp3 = getResourceID("fly", "raw", getApplicationContext());
         mp = MediaPlayer.create(MainActivity.this, sonidomp3);
         mp.start();
 
