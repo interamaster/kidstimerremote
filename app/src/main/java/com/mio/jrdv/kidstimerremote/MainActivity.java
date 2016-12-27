@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
@@ -27,6 +29,8 @@ import android.widget.TextView;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int ANIMATION_DURATION = 1500;
     private static final int ANIMATION_OFFSET = 250;
+
+
+    //para el password por si falla el remote:
+    private TextView Password;
 
 
     @Override
@@ -175,6 +183,13 @@ public class MainActivity extends AppCompatActivity {
         if (!kidname.equals("NONE")){
             Kid2YAtieneUID=true;
         }
+
+
+
+        //para el passw
+
+
+                Password=(TextView)findViewById(R.id.secretCodetxt) ;
 
     }
 
@@ -639,6 +654,23 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
 
+
+
+            //1º)ponemos el codigo visual:
+
+            Password.setText( generaNumeroClave("15min"));
+
+            //Y LO ANIMAMOS
+
+            final Animation myAnim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.bounce); // Use bounce interpolator with amplitude 0.2 and frequency 20
+            BounceInterpolator interpolator = new BounceInterpolator(0.2, 20);
+            myAnim.setInterpolator(interpolator);
+            Password.startAnimation(myAnim);
+
+
+
+
+
             //2º)vamos aver cual es:
             //si hay un nombre vamos aver cual:
 
@@ -738,6 +770,21 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
 
+            //1º)ponemos el codigo visual:
+
+            Password.setText( generaNumeroClave("30min"));
+
+            //Y LO ANIMAMOS
+
+            final Animation myAnim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.bounce); // Use bounce interpolator with amplitude 0.2 and frequency 20
+            BounceInterpolator interpolator = new BounceInterpolator(0.2, 20);
+            myAnim.setInterpolator(interpolator);
+            Password.startAnimation(myAnim);
+
+
+
+
+
             //2º)vamos aver cual es:
             //si hay un nombre vamos aver cual:
 
@@ -831,6 +878,20 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
 
+
+            //1º)ponemos el codigo visual:
+
+            Password.setText( generaNumeroClave("1HORA"));
+
+            //Y LO ANIMAMOS
+
+            final Animation myAnim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.bounce); // Use bounce interpolator with amplitude 0.2 and frequency 20
+            BounceInterpolator interpolator = new BounceInterpolator(0.2, 20);
+            myAnim.setInterpolator(interpolator);
+            Password.startAnimation(myAnim);
+
+
+
             //2º)vamos aver cual es:
             //si hay un nombre vamos aver cual:
 
@@ -918,6 +979,20 @@ public class MainActivity extends AppCompatActivity {
 
 
         } else {
+
+
+            //1º)ponemos el codigo visual:
+
+            Password.setText( generaNumeroClave("3HORAS"));
+
+            //Y LO ANIMAMOS
+
+            final Animation myAnim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.bounce); // Use bounce interpolator with amplitude 0.2 and frequency 20
+            BounceInterpolator interpolator = new BounceInterpolator(0.2, 20);
+            myAnim.setInterpolator(interpolator);
+            Password.startAnimation(myAnim);
+
+
 
             //2º)vamos aver cual es:
             //si hay un nombre vamos aver cual:
@@ -1007,6 +1082,21 @@ public class MainActivity extends AppCompatActivity {
 
 
         } else {
+
+
+            //1º)ponemos el codigo visual:
+
+            Password.setText( generaNumeroClave("CASTIGO"));
+
+            //Y LO ANIMAMOS
+
+            final Animation myAnim = AnimationUtils.loadAnimation(MainActivity.this, R.anim.bounce); // Use bounce interpolator with amplitude 0.2 and frequency 20
+            BounceInterpolator interpolator = new BounceInterpolator(0.2, 20);
+            myAnim.setInterpolator(interpolator);
+            Password.startAnimation(myAnim);
+
+
+
 
             //2º)vamos aver cual es:
             //si hay un nombre vamos aver cual:
@@ -1162,6 +1252,84 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////GENERAR CODE///////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private String generaNumeroClave(String tiempo){
+
+        Calendar c = Calendar.getInstance();
+        Horas = c.get(Calendar.HOUR_OF_DAY);//formato 24h
+        minutes=c.get(Calendar.MINUTE);
+
+        String clave =String.format("%02d", Horas)+String.format("%02d", minutes);
+        Log.d("INFO","el numero secreto sin invertir es: "+ clave);
+
+        clave =new StringBuilder(clave).reverse().toString();
+        Log.d("INFO","el numero secreto YA INVERTIDO  es: "+ clave);
+
+        //vasmoa a acompañarlo del nombre
+
+        String NombreNino = ChildrenName.getText().toString();
+
+        //y del tiempo:
+
+        NombreNino=NombreNino+tiempo;
+
+        NombreNino.equalsIgnoreCase(NombreNino);
+
+        byte[] bytes = new byte[0];
+        try {
+            bytes = NombreNino.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            NombreNino = new String(bytes, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        int sumanombreniuno = 0;
+
+        for (int i : bytes)
+            sumanombreniuno += i;
+
+        //1º) le restamos al numero invertido 1000 si se puede si no se deja (minimo sera las 01:00-->10)
+        int numeroCalveFinalenInt=Integer.parseInt(clave);
+
+        if (numeroCalveFinalenInt>2000) {
+            numeroCalveFinalenInt=numeroCalveFinalenInt-1000;
+
+        }
+
+        //le sumamos el valor del nombre:
+        numeroCalveFinalenInt=numeroCalveFinalenInt+sumanombreniuno;
+
+        //lo convertimos en string
+
+        clave =String.valueOf(numeroCalveFinalenInt);
+
+        Log.d("INFO","el numero secreto YA INVERTIDO  Y codificado con la suma es: "+ clave);
+
+
+
+        if (numeroCalveFinalenInt<1000) {
+            //si es menor de 1000 que le ponga un cero a la izqda
+
+            clave="0"+clave;
+
+
+        }
+        //lo devolvemos
+
+        return clave;
+
+    }
+
 
 
 }

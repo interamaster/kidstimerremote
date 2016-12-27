@@ -30,7 +30,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="0dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="40dp">
 
         <Button
             android:id="@+id/angry_btn"
@@ -46,6 +46,7 @@
             android:shadowDx="0"
             android:shadowDy="0"
             android:shadowRadius="5"
+
             />
 
     </LinearLayout>
@@ -114,6 +115,22 @@
             />
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="----"
+            android:textColor="#FFFFFF"
+            android:textSize="40sp"
+            android:id="@+id/secretCodetxt"
+            android:gravity="center_horizontal"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -124,6 +141,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         >
+
+
 
         <com.github.siyamed.shapeimageview.CircularImageView
             android:layout_width="0dp"
