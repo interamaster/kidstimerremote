@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">KIDSTIMER REMOTE</string>
+
+    <string name="enteruid">From Email I sent you!!!!!!</string>
+
+
+    <string name="info0titu">FIRST SEND ME EMAIL WITH YOUR KID´S NAME AND PASSWORD  </string>
+    <string name="info0"> We need your kid´s name and password exactly as shown in KIDSTIMER!!!!  \n\n I will sent you back ASAP your KID´s ID to be entered when creating a new  KID to get EXTRATIME CODE to be pushed remotely</string>
+
+
+
+    <string name="info1titu">EXTRA TIME CODE TO ENTER MANUALLY IF REMOTE PUSH IS NOT WORKING/NO INTERNET CONNECTION  </string>
+    <string name="info1">Make sure your kid\`s name is the same you generate the code, and also that your device and your kid\'s device have the same TIME(HOUR AND MINUTES)!!!. \n\nOnce generated you have to enter it on your kid\'s device in less than 30 secs!!(Don\`t worry you can generate it again just clicking again))</string>
+
+
+    <string name="info2titu">Enter your kid Name and ID From the email you received from me </string>
+    <string name="info2"> Make Sure the name  and the ID are the same as you received from my email!!.This way you only have to click on the image to generate the code and will be remotely sent to your kid´s device.\n\nLong Press to change!!</string>
+
+
+
+    <string name="info3titu">Generate EXTRA TIME CODES!!</string>
+    <string name="info3"> After selecting Kid click on the desired time to generate EXTRA TIME CODES THAT WILL BE PUSHED TO YOUR KID´S DEVICE!!.</string>
+
+
+
+    <string name="info5titu">GAME OVER</string>
+    <string name="info5"> This CODE will disable till midnight your kid\'s device(unless you enter a new EXTRA TIME CODE.)</string>
+
+
+
+    <string name="emailtitu">New ID for KIDSTIMER REMOTE!!</string>
+
+    <string name="emailcampo">Please fill the Data bellow: \n\n Kid name:  \n\n Kid Password \n\n your email(where you bought KIDSTIMER REMOTE from Google Play):</string>
+
 </resources>

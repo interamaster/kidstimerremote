@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KIDSTIMER REMOTE</string>
+
+    <string name="enteruid">Del email que ha recibido!!!!!!</string>
+
+    <string name="info0titu">PRIMERO ENVIAME UN  EMAIL CON EL NOMBRE Y PASSWORD  DE TU HIJO  </string>
+    <string name="info0">Necesitamos el nombre y Password de tu Hijo exactamente como aparece en KIDSTIMER!!!  \n\nTe mandaré lo antes posible el ID que necesitas para crear un nuevo KID para conseguir que el EXTRATIME CODE le llegue a él/ella remotamente</string>
+
+
+    <string name="info1titu">EXTRA TIME CODE  SI FALLA EL ENVIO/NO TIENE CONEXION A INTERNET </string>
+    <string name="info1">Asegurate que el nombre que usas es el del artista en cuestión,  y también que la hora de tu dispositivo y el del artista coiniciden (Hora y minuto)!!!. \n\nUna vez que se genere tienes 30 segs para ponerlo!!(Tranquilo puedes gnerar otro si vuelves a pulsar))</string>
+
+
+    <string name="info2titu">Entra el Nombre y la ID que recibistes por Email</string>
+    <string name="info2">Asegurate que el nombre  coincide con el que pusistes en KIDSTIMER FREE y que el ID es el que has recibido por email para el artista!!.Así sólo tendras que pulsar en la imagen para generar el codigo que se enviará de manera remota.\n\nDeja pulsado para cambiar imagen o nombre</string>
+
+
+
+    <string name="info3titu">Genera EXTRA TIME CODES!!</string>
+    <string name="info3"> Despues de elegir el artista con la foto  pulsa en el icono deseado para enviar remotamente los correspondientes  EXTRA TIME CODES!!.</string>
+
+
+
+    <string name="info5titu">GAME OVER</string>
+    <string name="info5"> Este CODE hará que la tablet/móvil del artista no se pueda usar hasta medianoche (a menos que metas otro EXTRA TIME CODE.)</string>
+
+
+    <string name="emailtitu">Nuevo ID para KIDSTIMER REMOTE!!</string>
+
+
+    <string name="emailcampo">Por favor rellena los campos de abajo: \n\n Nombre niño:  \n\n Password del Niño: \n\n Tu email (con el que compraste KIDSTIMER REMOTE en Google Play):</string>
+
+
+</resources>

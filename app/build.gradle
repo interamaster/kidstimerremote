@@ -36,5 +36,8 @@ dependencies {
 
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
 
+    //para la intro
+    compile 'com.getkeepsafe.taptargetview:taptargetview:1.4.1'
+
 
 }

@@ -2,6 +2,7 @@ package com.mio.jrdv.kidstimerremote;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.StrictMode;
@@ -24,8 +25,11 @@ import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
@@ -34,13 +38,13 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static  String KIDFireBaseUID;
-    public static  String KID2FireBaseUID;
+    public static String KIDFireBaseUID;
+    public static String KID2FireBaseUID;
 
-    private  boolean Kid1YAtieneUID;
-    private  boolean Kid2YAtieneUID;
+    private boolean Kid1YAtieneUID;
+    private boolean Kid2YAtieneUID;
     //Referencing EditText placed inside in xml layout file
-    TextView ChildrenName ;
+    TextView ChildrenName;
 
     //para el dialog del nombe
 
@@ -81,6 +85,10 @@ public class MainActivity extends AppCompatActivity {
     //para el password por si falla el remote:
     private TextView Password;
 
+    //PARA LA INTRO HELP
+
+    TapTargetSequence sequence;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,11 +101,99 @@ public class MainActivity extends AppCompatActivity {
         ab.hide();
 
 
+        ///////////////////////////////////////INTRO HELP/////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        sequence = new TapTargetSequence(this)
+                .targets(
+
+
+                        // TapTarget.forView(findViewById(R.id.txtname_check_children),"Enter kid Name","Enter your kid Name manually."),
+
+                        TapTarget.forView(findViewById(R.id.emailbutton), getString(R.string.info0titu), getString(R.string.info0)),
+
+
+                        //TapTarget.forView(findViewById(R.id.secretCodetxt),"EXTRA TIME CODE","Make sure your kid`s name is the same you generate the code, and also that your device and your kid's device have the same TIME(HOUR AND MINUTES)!!!. \n\nOnce generated you have to enter it on your kid's device in less than 30 secs!!(Don`t worry you can generate it again just clicking again))")
+
+                        TapTarget.forView(findViewById(R.id.secretCodetxt), getString(R.string.info1titu), getString(R.string.info1))
+
+                                .transparentTarget(true)
+                                .outerCircleColor(R.color.colorAccent),
+
+
+                        //  TapTarget.forView(findViewById(R.id.kidsreg1),"Enter your kid Name and picture","Make Sure the name is the same as introduced in KIDSTIMER FREE!!.This way you only have to click on the image to generate the code.Long Press to change!!")
+
+
+                        TapTarget.forView(findViewById(R.id.kidsreg1), getString(R.string.info2titu), getString(R.string.info2))
+                                .outerCircleColor(R.color.color_blue)
+                                .targetCircleColor(R.color.color_negro)
+                                .titleTextColor(R.color.color_negro)
+                                .transparentTarget(true),
+
+                        //TapTarget.forView(findViewById(R.id.hora1pass),"Generate EXTRA TIME CODES!!","After selecting Kid(or enter manually the name) click on the desired time to generate EXTRA TIME CODES!!.")
+
+                        TapTarget.forView(findViewById(R.id.hora1pass), getString(R.string.info3titu), getString(R.string.info3))
+                                .outerCircleColor(R.color.color_white)
+                                .targetCircleColor(R.color.colorPrimary)
+                                .titleTextColor(R.color.color_negro),
+
+                        // TapTarget.forView(findViewById(R.id.txtname_check_children),"Enter kid Name","Enter your kid Name manually."),
+
+
+                        //TapTarget.forView(findViewById(R.id.angry_btn),"GAME OVER","This CODE will disable till midnight your kid's device(unless you enter a new EXTRA TIME CODE.)")
+
+                        TapTarget.forView(findViewById(R.id.angry_btn), getString(R.string.info5titu), getString(R.string.info5))
+                                .transparentTarget(true)
+                                .outerCircleColor(R.color.colorAccent)
+
+                ).listener(new TapTargetSequence.Listener() {
+                    @Override
+                    public void onSequenceFinish() {
+
+                        // editor.putBoolean("finished",true);
+                        // editor.commit();
+                        //idem con mi class:
+                        // Myapplication.preferences.edit().putString(Myapplication.PREF_NAME_KID1,userInputDialogEditText.getText().toString()).commit();
+
+                        Myapplication.preferences.edit().putBoolean("finished", true).commit();
+                        //2º)la foto
+
+
+                    }
+
+                    @Override
+                    public void onSequenceCanceled() {
+
+                        //  editor.putBoolean("finished",true);
+                        // editor.commit();
+                        //idem con mi class:
+                        Myapplication.preferences.edit().putBoolean("finished", true).commit();
+                    }
+                });
+
+        // boolean isSequenceFinished = sharedPref.getBoolean("finished",false);
+
+        //idem con mi class:
+        // String Fotokid1path = Myapplication.preferences.getString(Myapplication.PREF_FOTO_PATH_KID1,"NONE");//por defecto vale 0
+        boolean isSequenceFinished = Myapplication.preferences.getBoolean("finished", false);//por defecto vale 0
+
+
+        if (!isSequenceFinished) {//TODO poner a !isSequenceFinished para funcionamineto normal
+
+            sequence.start();
+
+        }
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
         //allow network in maintrerad:
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
 
 
         //info:
@@ -125,10 +221,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
 
-                 Kid1YAtieneUID=false;
+                Kid1YAtieneUID = false;
 
 
-                EnviarKid1( v);
+                EnviarKid1(v);
 
 
                 return false;
@@ -140,16 +236,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
 
-                 Kid2YAtieneUID=false;
+                Kid2YAtieneUID = false;
 
 
-                EnviarKid2( v);
+                EnviarKid2(v);
 
 
                 return false;
             }
         });
-
 
 
         //para los timepos en XMLÑ salen sin redeondear ?¿?¿
@@ -169,47 +264,45 @@ public class MainActivity extends AppCompatActivity {
         generate3horas.setImageResource(R.drawable.icon_3_horas);
 
 
-
         //CHCEQEUAMOS SI YA EXISTEN LOS DATOS DE LOS KIDS O NO
 
-        String Fotokid1path = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID1,"NONE");//por defecto vale 0
+        String Fotokid1path = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID1, "NONE");//por defecto vale 0
 
-        if (!Fotokid1path.equals("NONE")){
-            Kid1YAtieneUID=true;
+        if (!Fotokid1path.equals("NONE")) {
+            Kid1YAtieneUID = true;
         }
 
-        String kidname = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID2,"NONE");//por defecto vale 0
+        String kidname = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID2, "NONE");//por defecto vale 0
 
-        if (!kidname.equals("NONE")){
-            Kid2YAtieneUID=true;
+        if (!kidname.equals("NONE")) {
+            Kid2YAtieneUID = true;
         }
-
 
 
         //para el passw
 
 
-                Password=(TextView)findViewById(R.id.secretCodetxt) ;
+        Password = (TextView) findViewById(R.id.secretCodetxt);
 
     }
 
-    private void enviarNotificaction(String EXTRATIME,String KIDUID) {
+    private void enviarNotificaction(String EXTRATIME, String KIDUID) {
 
 
         //cresamo el helper
 
-        FCMHelper fcm=FCMHelper.getInstance();
+        FCMHelper fcm = FCMHelper.getInstance();
 
         //JsonObject notificationObject = new JsonObject(); notificationObject.addProperty("KEY", "VALUE"); // See GSON-Reference
 
 
         JsonObject dataObject = new JsonObject();
         dataObject.addProperty("EXTRATIME", EXTRATIME); // 1 HORA
-        dataObject.addProperty("body","TUS PADRES TE DAN MAS TIEMPO");
-        dataObject.addProperty("title","TE ACABAN DE DAR TIEMPO EXTRA");
-       // String RECIPIENT="cF_GGomFh10:APA91bGBRA8W7VlJ5xK8JjU8mUJ1vujnc1XlJhZTix5Xm39o4zwFCv8KfE0YxshtzTdBJ4hUDGXuJW9WIm8XOf9tzhBzJ5X1wf_v-UDXcrCJ5MBS648qPJoh-1cko5NemJvu8ySm20Wo";//yo!!
+        dataObject.addProperty("body", "TUS PADRES TE DAN MAS TIEMPO");
+        dataObject.addProperty("title", "TE ACABAN DE DAR TIEMPO EXTRA");
+        // String RECIPIENT="cF_GGomFh10:APA91bGBRA8W7VlJ5xK8JjU8mUJ1vujnc1XlJhZTix5Xm39o4zwFCv8KfE0YxshtzTdBJ4hUDGXuJW9WIm8XOf9tzhBzJ5X1wf_v-UDXcrCJ5MBS648qPJoh-1cko5NemJvu8ySm20Wo";//yo!!
 
-        String RECIPIENT=KIDUID;
+        String RECIPIENT = KIDUID;
 
         try {
             //  fcm.sendNotification(FCMHelper.TYPE_TO, RECIPIENT, notificationObject); // RECIPIENT is the token of the device, or device group, or a topic.
@@ -271,7 +364,7 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogBox, int id) {
                             dialogBox.cancel();
-                            Kid1YAtieneUID=true;
+                            Kid1YAtieneUID = true;
                         }
                     });
 
@@ -280,45 +373,40 @@ public class MainActivity extends AppCompatActivity {
             alertDialogAndroid.show();
 
             //Overriding the handler immediately after show is probably a better approach than OnShowListener as described below
-            alertDialogAndroid.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
-            {
+            alertDialogAndroid.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     Boolean wantToCloseDialog = false;
                     //Do stuff, possibly set wantToCloseDialog to true then...
 
 
                     //1º)chequeamos si el nombre si esta bien
 
-                    if (userInputDialogEditText.getText().toString().isEmpty() || userInputDialogEditText.getText().toString().length() <4 || userInputDialogEditText.getText().toString().length()>8){
+                    if (userInputDialogEditText.getText().toString().isEmpty() || userInputDialogEditText.getText().toString().length() < 4 || userInputDialogEditText.getText().toString().length() > 8) {
 
                         //esta mal el nombre
                         // dialogBox.cancel();
 
                         //en vez de cancel mejor le avisamos:
                         userInputDialogEditText.setError("min 4 and max 8 characteres");
-                    }
-
-                    else {
+                    } else {
 
                         //1º)guaradmos el nombre
 
-                        Myapplication.preferences.edit().putString(Myapplication.PREF_NAME_KID1,userInputDialogEditText.getText().toString()).commit();
+                        Myapplication.preferences.edit().putString(Myapplication.PREF_NAME_KID1, userInputDialogEditText.getText().toString()).commit();
                         //2º)la foto
 
 
-                        Log.d("INFO", "tomando nombre kid 1: "+userInputDialogEditText.getText().toString());
+                        Log.d("INFO", "tomando nombre kid 1: " + userInputDialogEditText.getText().toString());
 
-                           TAGKid = "KID1";
-
+                        TAGKid = "KID1";
 
 
                         //ponemos a true para que se cierre:
-                        wantToCloseDialog=true;
+                        wantToCloseDialog = true;
                     }
 
-                    if(wantToCloseDialog)
+                    if (wantToCloseDialog)
                         alertDialogAndroid.dismiss();
                     //else dialog stays open. Make sure you have an obvious way to close the dialog especially if you set cancellable to false.
 
@@ -328,13 +416,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
-        }
-
-
-
-
-
-        else {
+        } else {
 
             //ya tine foto ponemos elm nombre ene l edittext
 
@@ -342,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
 
             //idem con pref
 
-            String kid1NMameFromPref = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID1,"NONE");//por defecto vale 0
+            String kid1NMameFromPref = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID1, "NONE");//por defecto vale 0
 
             ChildrenName.setText(kid1NMameFromPref);
 
@@ -387,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogBox, int id) {
                                 dialogBox.cancel();
-                                Kid1YAtieneUID=true;
+                                Kid1YAtieneUID = true;
                             }
                         });
 
@@ -402,7 +484,7 @@ public class MainActivity extends AppCompatActivity {
                         Boolean wantToCloseDialog = false;
                         //Do stuff, possibly set wantToCloseDialog to true then...
 
-                        Log.d("INFO", "tomando UID kid 1: "+userInputDialogEditText.getText().toString());
+                        Log.d("INFO", "tomando UID kid 1: " + userInputDialogEditText.getText().toString());
 
                         Kid1YAtieneUID = true;
                         //  guardamos el path en pref
@@ -410,8 +492,7 @@ public class MainActivity extends AppCompatActivity {
                         Myapplication.preferences.edit().putString(Myapplication.PREF_UID_KID1, userInputDialogEditText.getText().toString()).commit();
 
 
-
-                        String kid1NMameFromPref = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID1,"NONE");//por defecto vale 0
+                        String kid1NMameFromPref = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID1, "NONE");//por defecto vale 0
 
                         ChildrenName.setText(kid1NMameFromPref);
 
@@ -454,7 +535,7 @@ public class MainActivity extends AppCompatActivity {
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogBox, int id) {
                                 dialogBox.cancel();
-                                Kid2YAtieneUID=true;
+                                Kid2YAtieneUID = true;
                             }
                         });
 
@@ -469,7 +550,7 @@ public class MainActivity extends AppCompatActivity {
                         Boolean wantToCloseDialog = false;
                         //Do stuff, possibly set wantToCloseDialog to true then...
 
-                        Log.d("INFO", "tomando UID kid 2: "+userInputDialogEditText2.getText().toString());
+                        Log.d("INFO", "tomando UID kid 2: " + userInputDialogEditText2.getText().toString());
 
                         Kid2YAtieneUID = true;
                         //  guardamos el path en pref
@@ -477,7 +558,7 @@ public class MainActivity extends AppCompatActivity {
                         Myapplication.preferences.edit().putString(Myapplication.PREF_UID_KID2, userInputDialogEditText2.getText().toString()).commit();
 
 
-                        String kid2NMameFromPref = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID2,"NONE");//por defecto vale 0
+                        String kid2NMameFromPref = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID2, "NONE");//por defecto vale 0
 
                         ChildrenName.setText(kid2NMameFromPref);
                         alertDialogAndroid2.dismiss();
@@ -493,13 +574,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        }
+    }
 
 
     public void EnviarKid2(View view) {
-
-
-
 
 
         if (!Kid2YAtieneUID) {
@@ -528,7 +606,7 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogBox, int id) {
                             dialogBox.cancel();
-                            Kid2YAtieneUID=true;
+                            Kid2YAtieneUID = true;
                         }
                     });
 
@@ -537,45 +615,40 @@ public class MainActivity extends AppCompatActivity {
             alertDialogAndroid.show();
 
             //Overriding the handler immediately after show is probably a better approach than OnShowListener as described below
-            alertDialogAndroid.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
-            {
+            alertDialogAndroid.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     Boolean wantToCloseDialog = false;
                     //Do stuff, possibly set wantToCloseDialog to true then...
 
 
                     //1º)chequeamos si el nombre si esta bien
 
-                    if (userInputDialogEditText.getText().toString().isEmpty() || userInputDialogEditText.getText().toString().length() <4 || userInputDialogEditText.getText().toString().length()>8){
+                    if (userInputDialogEditText.getText().toString().isEmpty() || userInputDialogEditText.getText().toString().length() < 4 || userInputDialogEditText.getText().toString().length() > 8) {
 
                         //esta mal el nombre
                         // dialogBox.cancel();
 
                         //en vez de cancel mejor le avisamos:
                         userInputDialogEditText.setError("min 4 and max 8 characteres");
-                    }
-
-                    else {
+                    } else {
 
                         //1º)guaradmos el nombre
 
-                        Myapplication.preferences.edit().putString(Myapplication.PREF_NAME_KID2,userInputDialogEditText.getText().toString()).commit();
+                        Myapplication.preferences.edit().putString(Myapplication.PREF_NAME_KID2, userInputDialogEditText.getText().toString()).commit();
                         //2º)la foto
 
 
-                        Log.d("INFO", "tomando nombre kid 2: "+userInputDialogEditText.getText().toString());
+                        Log.d("INFO", "tomando nombre kid 2: " + userInputDialogEditText.getText().toString());
 
                         TAGKid = "KID2";
 
 
-
                         //ponemos a true para que se cierre:
-                        wantToCloseDialog=true;
+                        wantToCloseDialog = true;
                     }
 
-                    if(wantToCloseDialog)
+                    if (wantToCloseDialog)
                         alertDialogAndroid.dismiss();
                     //else dialog stays open. Make sure you have an obvious way to close the dialog especially if you set cancellable to false.
 
@@ -585,13 +658,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
-        }
-
-
-
-
-
-        else {
+        } else {
 
             //ya tine foto ponemos elm nombre ene l edittext
 
@@ -599,7 +666,7 @@ public class MainActivity extends AppCompatActivity {
 
             //idem con pref
 
-            String kid1NMameFromPref = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID2,"NONE");//por defecto vale 0
+            String kid1NMameFromPref = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID2, "NONE");//por defecto vale 0
 
             ChildrenName.setText(kid1NMameFromPref);
 
@@ -614,8 +681,6 @@ public class MainActivity extends AppCompatActivity {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
     public void generar15minCode(View view) {
 
 
@@ -625,7 +690,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // mis -clicking prevention, using threshold of 1000 ms
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
@@ -655,10 +720,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
 
 
-
             //1º)ponemos el codigo visual:
 
-            Password.setText( generaNumeroClave("15min"));
+            Password.setText(generaNumeroClave("15min"));
 
             //Y LO ANIMAMOS
 
@@ -666,9 +730,6 @@ public class MainActivity extends AppCompatActivity {
             BounceInterpolator interpolator = new BounceInterpolator(0.2, 20);
             myAnim.setInterpolator(interpolator);
             Password.startAnimation(myAnim);
-
-
-
 
 
             //2º)vamos aver cual es:
@@ -695,12 +756,10 @@ public class MainActivity extends AppCompatActivity {
 
 
                 //es kid1 y 15 min!!!
-                flyEnvelope("kidsreg1","min15pass");
+                flyEnvelope("kidsreg1", "min15pass");
 
 
                 enviarNotificaction(TIME, kid1UIDFromPref);
-
-
 
 
                 SuenaalGenerar();
@@ -713,9 +772,8 @@ public class MainActivity extends AppCompatActivity {
                 String kid2UIDFromPref = Myapplication.preferences.getString(Myapplication.PREF_UID_KID2, "NONE");//por defecto vale 0
 
 
-
                 //es kid2 y 15 min!!!
-                flyEnvelope("kidsreg2","min15pass");
+                flyEnvelope("kidsreg2", "min15pass");
 
                 enviarNotificaction(TIME, kid2UIDFromPref);
 
@@ -734,14 +792,13 @@ public class MainActivity extends AppCompatActivity {
     public void generar30minCode(View view) {
 
 
-
 ///////////////////////////////////////////////////////////////////
 ///////////////para evitar dobles clicks rapidos //////////////
 ///////////////////////////////////////////////////////////////////
 
 
         // mis -clicking prevention, using threshold of 1000 ms
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
@@ -772,7 +829,7 @@ public class MainActivity extends AppCompatActivity {
 
             //1º)ponemos el codigo visual:
 
-            Password.setText( generaNumeroClave("30min"));
+            Password.setText(generaNumeroClave("30min"));
 
             //Y LO ANIMAMOS
 
@@ -780,9 +837,6 @@ public class MainActivity extends AppCompatActivity {
             BounceInterpolator interpolator = new BounceInterpolator(0.2, 20);
             myAnim.setInterpolator(interpolator);
             Password.startAnimation(myAnim);
-
-
-
 
 
             //2º)vamos aver cual es:
@@ -809,10 +863,9 @@ public class MainActivity extends AppCompatActivity {
 
 
                 //es kid1 y 15 min!!!
-                flyEnvelope("kidsreg1","min30pass");
+                flyEnvelope("kidsreg1", "min30pass");
 
                 enviarNotificaction(TIME, kid1UIDFromPref);
-
 
 
                 SuenaalGenerar();
@@ -826,9 +879,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                 //es kid2 y 15 min!!!
-                flyEnvelope("kidsreg2","min30pass");
+                flyEnvelope("kidsreg2", "min30pass");
                 enviarNotificaction(TIME, kid2UIDFromPref);
-
 
 
                 SuenaalGenerar();
@@ -849,7 +901,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // mis -clicking prevention, using threshold of 1000 ms
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
@@ -881,7 +933,7 @@ public class MainActivity extends AppCompatActivity {
 
             //1º)ponemos el codigo visual:
 
-            Password.setText( generaNumeroClave("1HORA"));
+            Password.setText(generaNumeroClave("1HORA"));
 
             //Y LO ANIMAMOS
 
@@ -889,7 +941,6 @@ public class MainActivity extends AppCompatActivity {
             BounceInterpolator interpolator = new BounceInterpolator(0.2, 20);
             myAnim.setInterpolator(interpolator);
             Password.startAnimation(myAnim);
-
 
 
             //2º)vamos aver cual es:
@@ -915,7 +966,7 @@ public class MainActivity extends AppCompatActivity {
                 String kid1UIDFromPref = Myapplication.preferences.getString(Myapplication.PREF_UID_KID1, "NONE");//por defecto vale 0
 
                 //es kid1 y 60 min!!!
-                flyEnvelope("kidsreg1","hora1pass");
+                flyEnvelope("kidsreg1", "hora1pass");
                 enviarNotificaction(TIME, kid1UIDFromPref);
 
                 SuenaalGenerar();
@@ -928,7 +979,7 @@ public class MainActivity extends AppCompatActivity {
                 String kid2UIDFromPref = Myapplication.preferences.getString(Myapplication.PREF_UID_KID2, "NONE");//por defecto vale 0
 
                 //es kid2 y 60 min!!!
-                flyEnvelope("kidsreg2","hora1pass");
+                flyEnvelope("kidsreg2", "hora1pass");
                 enviarNotificaction(TIME, kid2UIDFromPref);
 
 
@@ -950,13 +1001,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         // mis -clicking prevention, using threshold of 1000 ms
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
 
         // do your magic here . . . .
-
 
 
         //1º chequeamos que tien nombre y esta bien:
@@ -983,7 +1033,7 @@ public class MainActivity extends AppCompatActivity {
 
             //1º)ponemos el codigo visual:
 
-            Password.setText( generaNumeroClave("3HORAS"));
+            Password.setText(generaNumeroClave("3HORAS"));
 
             //Y LO ANIMAMOS
 
@@ -991,7 +1041,6 @@ public class MainActivity extends AppCompatActivity {
             BounceInterpolator interpolator = new BounceInterpolator(0.2, 20);
             myAnim.setInterpolator(interpolator);
             Password.startAnimation(myAnim);
-
 
 
             //2º)vamos aver cual es:
@@ -1017,7 +1066,7 @@ public class MainActivity extends AppCompatActivity {
                 String kid1UIDFromPref = Myapplication.preferences.getString(Myapplication.PREF_UID_KID1, "NONE");//por defecto vale 0
 
                 //es kid1 y 3 horas !!!
-                flyEnvelope("kidsreg1","hora3pass");
+                flyEnvelope("kidsreg1", "hora3pass");
 
                 enviarNotificaction(TIME, kid1UIDFromPref);
                 SuenaalGenerar();
@@ -1031,7 +1080,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 //es kid2 y 3 horas !!!
-                flyEnvelope("kidsreg2","hora3pass");
+                flyEnvelope("kidsreg2", "hora3pass");
 
 
                 enviarNotificaction(TIME, kid2UIDFromPref);
@@ -1054,7 +1103,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // mis -clicking prevention, using threshold of 1000 ms
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
@@ -1086,7 +1135,7 @@ public class MainActivity extends AppCompatActivity {
 
             //1º)ponemos el codigo visual:
 
-            Password.setText( generaNumeroClave("CASTIGO"));
+            Password.setText(generaNumeroClave("CASTIGO"));
 
             //Y LO ANIMAMOS
 
@@ -1094,8 +1143,6 @@ public class MainActivity extends AppCompatActivity {
             BounceInterpolator interpolator = new BounceInterpolator(0.2, 20);
             myAnim.setInterpolator(interpolator);
             Password.startAnimation(myAnim);
-
-
 
 
             //2º)vamos aver cual es:
@@ -1142,9 +1189,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////SONIDOS///////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1152,10 +1196,8 @@ public class MainActivity extends AppCompatActivity {
     private void SuenaalGenerar() {
 
 
-
-
         Vibrator vibrator;
-        vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
 
         vibrator.vibrate(300); // vibrate for 0.3 seconds (e.g 300 milliseconds)
@@ -1168,12 +1210,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-    protected final static int getResourceID (final String resName, final String resType, final Context ctx) {
-        final int ResourceID =  ctx.getResources().getIdentifier(resName, resType, ctx.getApplicationInfo().packageName);
+    protected final static int getResourceID(final String resName, final String resType, final Context ctx) {
+        final int ResourceID = ctx.getResources().getIdentifier(resName, resType, ctx.getApplicationInfo().packageName);
         if (ResourceID == 0) {
-
 
 
             //en vez de una excepcion que lo ponga en el log solo
@@ -1196,21 +1235,17 @@ public class MainActivity extends AppCompatActivity {
     public void flyEnvelope(String Kid1or2, String minutos) {
 
 
+        // View botontimepovolar = findViewById(R.id.min15pass);
 
-       // View botontimepovolar = findViewById(R.id.min15pass);
-
-      //  View botonkidvolar = findViewById(R.id.kidsreg1);
-
+        //  View botonkidvolar = findViewById(R.id.kidsreg1);
 
 
-        View botontimepovolar = findViewById(getResources().getIdentifier(minutos,"id",getPackageName()));
+        View botontimepovolar = findViewById(getResources().getIdentifier(minutos, "id", getPackageName()));
 
-         View botonkidvolar = findViewById(getResources().getIdentifier(Kid1or2,"id",getPackageName()));
-
-
+        View botonkidvolar = findViewById(getResources().getIdentifier(Kid1or2, "id", getPackageName()));
 
 
-        int duration =  ANIMATION_DURATION ;
+        int duration = ANIMATION_DURATION;
         RotateAnimation rotationAnimation = new RotateAnimation(0, 360, botontimepovolar.getWidth() / 2, botontimepovolar.getHeight() / 2);
         rotationAnimation.setDuration(duration);
 
@@ -1236,7 +1271,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
 
-               // onEmailFlew();
+                // onEmailFlew();
                 Log.d("INFO", "fin animacion");
 
             }
@@ -1258,17 +1293,17 @@ public class MainActivity extends AppCompatActivity {
     //////////////////////////////////////////////////////GENERAR CODE///////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private String generaNumeroClave(String tiempo){
+    private String generaNumeroClave(String tiempo) {
 
         Calendar c = Calendar.getInstance();
         Horas = c.get(Calendar.HOUR_OF_DAY);//formato 24h
-        minutes=c.get(Calendar.MINUTE);
+        minutes = c.get(Calendar.MINUTE);
 
-        String clave =String.format("%02d", Horas)+String.format("%02d", minutes);
-        Log.d("INFO","el numero secreto sin invertir es: "+ clave);
+        String clave = String.format("%02d", Horas) + String.format("%02d", minutes);
+        Log.d("INFO", "el numero secreto sin invertir es: " + clave);
 
-        clave =new StringBuilder(clave).reverse().toString();
-        Log.d("INFO","el numero secreto YA INVERTIDO  es: "+ clave);
+        clave = new StringBuilder(clave).reverse().toString();
+        Log.d("INFO", "el numero secreto YA INVERTIDO  es: " + clave);
 
         //vasmoa a acompañarlo del nombre
 
@@ -1276,7 +1311,7 @@ public class MainActivity extends AppCompatActivity {
 
         //y del tiempo:
 
-        NombreNino=NombreNino+tiempo;
+        NombreNino = NombreNino + tiempo;
 
         NombreNino.equalsIgnoreCase(NombreNino);
 
@@ -1299,28 +1334,27 @@ public class MainActivity extends AppCompatActivity {
             sumanombreniuno += i;
 
         //1º) le restamos al numero invertido 1000 si se puede si no se deja (minimo sera las 01:00-->10)
-        int numeroCalveFinalenInt=Integer.parseInt(clave);
+        int numeroCalveFinalenInt = Integer.parseInt(clave);
 
-        if (numeroCalveFinalenInt>2000) {
-            numeroCalveFinalenInt=numeroCalveFinalenInt-1000;
+        if (numeroCalveFinalenInt > 2000) {
+            numeroCalveFinalenInt = numeroCalveFinalenInt - 1000;
 
         }
 
         //le sumamos el valor del nombre:
-        numeroCalveFinalenInt=numeroCalveFinalenInt+sumanombreniuno;
+        numeroCalveFinalenInt = numeroCalveFinalenInt + sumanombreniuno;
 
         //lo convertimos en string
 
-        clave =String.valueOf(numeroCalveFinalenInt);
+        clave = String.valueOf(numeroCalveFinalenInt);
 
-        Log.d("INFO","el numero secreto YA INVERTIDO  Y codificado con la suma es: "+ clave);
+        Log.d("INFO", "el numero secreto YA INVERTIDO  Y codificado con la suma es: " + clave);
 
 
-
-        if (numeroCalveFinalenInt<1000) {
+        if (numeroCalveFinalenInt < 1000) {
             //si es menor de 1000 que le ponga un cero a la izqda
 
-            clave="0"+clave;
+            clave = "0" + clave;
 
 
         }
@@ -1330,6 +1364,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    public void EmailPulsado(View view) {
+
+
+        //TODO PONER EMAIL CORRECTO
+        String emailTo="czkjckljclkjdl";
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+       // emailIntent.setType("text/plain");
+        emailIntent.setType("message/rfc822");
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,   new String[]{ emailTo});
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,  getString(R.string.emailtitu));
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, getString(R.string.emailcampo));
+
+
+        emailIntent.setType("message/rfc822");
+
+        try {
+            startActivity(Intent.createChooser(emailIntent,
+                    "Send email using..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this,
+                    "No email clients installed.",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
 
 }

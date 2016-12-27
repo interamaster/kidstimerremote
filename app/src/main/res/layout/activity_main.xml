@@ -12,6 +12,15 @@
     tools:context="com.mio.jrdv.kidstimerremote.MainActivity"
     android:background="@drawable/fondo2">
 
+    <ImageButton
+        android:id="@+id/emailbutton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/email"
+        android:scaleType="fitCenter"
+        android:background="@android:color/transparent"
+        android:layout_margin= "0dp"
+        android:onClick="EmailPulsado" />
 
     <TextView
         android:padding="10dp"
