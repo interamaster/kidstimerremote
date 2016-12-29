@@ -1369,7 +1369,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //TODO PONER EMAIL CORRECTO
-        String emailTo="czkjckljclkjdl";
+        String emailTo="jrdvsoft@gmail.com";
         final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
        // emailIntent.setType("text/plain");
         emailIntent.setType("message/rfc822");
