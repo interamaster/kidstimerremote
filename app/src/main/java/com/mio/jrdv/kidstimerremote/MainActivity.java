@@ -101,6 +101,108 @@ public class MainActivity extends AppCompatActivity {
         ab.hide();
 
 
+        //allow network in maintrerad:
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+
+
+        //intro help
+
+        introHelp();
+        //info:
+
+        //https://github.com/AndreiD/Spring-Android-Push-Notifications-FCM-
+        //https://github.com/MOSDEV82/fcmhelper
+
+
+        //Referencing EditText widgets and Button placed inside in xml layout file
+        ChildrenName = (TextView) findViewById(R.id.txtname_check_children);
+        //por defecto no tine uid que lo saque de PREFS
+
+        Kid1YAtieneUID = false;
+        Kid2YAtieneUID = false;
+
+
+        //para la foto:
+
+        MiFotoHijo1 = (ImageView) findViewById(R.id.kidsreg1);
+        MiFotoHijo2 = (ImageView) findViewById(R.id.kidsreg2);
+
+        //AÑADIMO LISTENER PARA EL LONGCLICK:
+
+        MiFotoHijo1.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                Kid1YAtieneUID = false;
+
+
+                EnviarKid1(v);
+
+
+                return false;
+            }
+        });
+
+
+        MiFotoHijo2.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                Kid2YAtieneUID = false;
+
+
+                EnviarKid2(v);
+
+
+                return false;
+            }
+        });
+
+
+        //para los timepos en XMLÑ salen sin redeondear ?¿?¿
+
+
+        generate15min = (ImageView) findViewById(R.id.min15pass);
+        generate30min = (ImageView) findViewById(R.id.min30pass);
+        generate60min = (ImageView) findViewById(R.id.hora1pass);
+        generate3horas = (ImageView) findViewById(R.id.hora3pass);
+
+
+        //losponemos desde resources
+
+        generate15min.setImageResource(R.drawable.icon_15_minutes);
+        generate30min.setImageResource(R.drawable.icon_30_minutes);
+        generate60min.setImageResource(R.drawable.icon_45_minutes);
+        generate3horas.setImageResource(R.drawable.icon_3_horas);
+
+
+        //CHCEQEUAMOS SI YA EXISTEN LOS DATOS DE LOS KIDS O NO
+
+        String Fotokid1path = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID1, "NONE");//por defecto vale 0
+
+        if (!Fotokid1path.equals("NONE")) {
+            Kid1YAtieneUID = true;
+        }
+
+        String kidname = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID2, "NONE");//por defecto vale 0
+
+        if (!kidname.equals("NONE")) {
+            Kid2YAtieneUID = true;
+        }
+
+
+        //para el passw
+
+
+        Password = (TextView) findViewById(R.id.secretCodetxt);
+
+    }
+
+    public void introHelp(){
+
         ///////////////////////////////////////INTRO HELP/////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -189,100 +291,6 @@ public class MainActivity extends AppCompatActivity {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-        //allow network in maintrerad:
-
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-
-        //info:
-
-        //https://github.com/AndreiD/Spring-Android-Push-Notifications-FCM-
-        //https://github.com/MOSDEV82/fcmhelper
-
-
-        //Referencing EditText widgets and Button placed inside in xml layout file
-        ChildrenName = (TextView) findViewById(R.id.txtname_check_children);
-        //por defecto no tine uid que lo saque de PREFS
-
-        Kid1YAtieneUID = false;
-        Kid2YAtieneUID = false;
-
-
-        //para la foto:
-
-        MiFotoHijo1 = (ImageView) findViewById(R.id.kidsreg1);
-        MiFotoHijo2 = (ImageView) findViewById(R.id.kidsreg2);
-
-        //AÑADIMO LISTENER PARA EL LONGCLICK:
-
-        MiFotoHijo1.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-
-                Kid1YAtieneUID = false;
-
-
-                EnviarKid1(v);
-
-
-                return false;
-            }
-        });
-
-
-        MiFotoHijo2.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-
-                Kid2YAtieneUID = false;
-
-
-                EnviarKid2(v);
-
-
-                return false;
-            }
-        });
-
-
-        //para los timepos en XMLÑ salen sin redeondear ?¿?¿
-
-
-        generate15min = (ImageView) findViewById(R.id.min15pass);
-        generate30min = (ImageView) findViewById(R.id.min30pass);
-        generate60min = (ImageView) findViewById(R.id.hora1pass);
-        generate3horas = (ImageView) findViewById(R.id.hora3pass);
-
-
-        //losponemos desde resources
-
-        generate15min.setImageResource(R.drawable.icon_15_minutes);
-        generate30min.setImageResource(R.drawable.icon_30_minutes);
-        generate60min.setImageResource(R.drawable.icon_45_minutes);
-        generate3horas.setImageResource(R.drawable.icon_3_horas);
-
-
-        //CHCEQEUAMOS SI YA EXISTEN LOS DATOS DE LOS KIDS O NO
-
-        String Fotokid1path = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID1, "NONE");//por defecto vale 0
-
-        if (!Fotokid1path.equals("NONE")) {
-            Kid1YAtieneUID = true;
-        }
-
-        String kidname = Myapplication.preferences.getString(Myapplication.PREF_NAME_KID2, "NONE");//por defecto vale 0
-
-        if (!kidname.equals("NONE")) {
-            Kid2YAtieneUID = true;
-        }
-
-
-        //para el passw
-
-
-        Password = (TextView) findViewById(R.id.secretCodetxt);
 
     }
 
@@ -1392,4 +1400,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void InfoPulsado(View view) {
+
+        Myapplication.preferences.edit().putBoolean("finished", false).commit();
+
+        introHelp();
+    }
 }

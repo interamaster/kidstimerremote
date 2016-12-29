@@ -22,6 +22,16 @@
         android:layout_margin= "0dp"
         android:onClick="EmailPulsado" />
 
+    <ImageButton
+        android:id="@+id/infobutton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/info_icon"
+        android:scaleType="fitCenter"
+        android:background="@android:color/transparent"
+        android:layout_alignParentEnd="true"
+        android:onClick="InfoPulsado" />
+
     <TextView
         android:padding="10dp"
         android:textSize="30sp"
